@@ -5,7 +5,7 @@ namespace LuckiusDev.Quill.Nodes
         NONE,
         AND,
         OR,
+        XOR,
         NOT,
-        XOR
     }
 }

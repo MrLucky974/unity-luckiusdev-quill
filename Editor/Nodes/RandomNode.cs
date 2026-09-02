@@ -13,7 +13,7 @@ namespace LuckiusDev.Quill.Nodes.Editor
         
         protected override void OnDefineOptions(IOptionDefinitionContext context)
         {
-            var portCountOption = context.AddOption<int>(k_portCountOptionName)
+            context.AddOption<int>(k_portCountOptionName)
                 .WithDefaultValue(2)
                 .Delayed();
         }
@@ -23,11 +23,11 @@ namespace LuckiusDev.Quill.Nodes.Editor
             AddNodeInputPort(context);
             
             var portCount = GetPortCount();
-
             for (int i = 0; i < portCount; i++)
             {
                 context.AddOutputPort($"{k_outputPortName}{i}")
                     .WithDisplayName($"Output {i + 1}")
+                    .WithCapacity(PortCapacity.Single)
                     .Build();
             }
         }

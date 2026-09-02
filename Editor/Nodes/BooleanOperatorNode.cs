@@ -24,17 +24,19 @@ namespace LuckiusDev.Quill.Nodes.Editor
             if (op == EBooleanOperator.NONE) return;
             
             context.AddOutputPort<bool>(k_outputPortName)
-                .WithCapacity(PortCapacity.Single)
+                .WithDisplayName("Output")
                 .Build();
             
             context.AddInputPort<bool>($"{k_inputPortName}A")
                 .WithCapacity(PortCapacity.Single)
+                .WithDisplayName(op == EBooleanOperator.NOT ? "Input" : "Input A")
                 .Build();
 
             if (op == EBooleanOperator.NOT) return;
             
             context.AddInputPort<bool>($"{k_inputPortName}B")
                 .WithCapacity(PortCapacity.Single)
+                .WithDisplayName("Input B")
                 .Build();
         }
 

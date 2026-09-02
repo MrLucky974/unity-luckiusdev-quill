@@ -36,10 +36,12 @@ namespace LuckiusDev.Quill.Nodes.Editor
             {
                 context.AddInputPort<bool>($"Condition{i}")
                     .WithDisplayName($"Condition {i + 1}")
+                    .WithCapacity(PortCapacity.Single)
                     .Build();
                 
                 context.AddOutputPort($"{k_outputPortName}{i}")
                     .WithDisplayName($"Output {i + 1}")
+                    .WithCapacity(PortCapacity.Single)
                     .Build();
             }
         }

@@ -8,7 +8,8 @@ namespace LuckiusDev.Quill.Nodes.Editor
     [Node("Nodes/Flow", "", "Start")]
     internal sealed class StartNode : BaseNode
     {
-        protected override void OnDefinePorts(IPortDefinitionContext context) {
+        protected override void OnDefinePorts(IPortDefinitionContext context)
+        {
             AddNodeOutputPort(context);
         }
 
