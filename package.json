@@ -1,0 +1,27 @@
+{
+  "name": "io.github.mrlucky974.unity-luckiusdev-quill",
+  "displayName": "LuckiusDev Quill",
+  "version": "1.0.0",
+  "unity": "6000.6",
+  "description": "A flexible dialogue system made using Graph Toolkit",
+  "author": {
+    "name": "luckiusdev",
+    "url": "https://github.com/mrlucky974"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/MrLucky974/unity-luckiusdev-quill.git"
+  },
+  "keywords": [
+    "unity",
+    "tools",
+    "dialogue",
+    "visualnovel",
+    "gameplay",
+    "content"
+  ],
+  "dependencies": {
+    "com.unity.inputsystem": "1.20.0"
+  }
+}
+  
