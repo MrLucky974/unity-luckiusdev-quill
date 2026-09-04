@@ -5,7 +5,7 @@ using Random = UnityEngine.Random;
 namespace LuckiusDev.Quill.Nodes
 {
     [Serializable]
-    public class RandomChanceRuntimeNode : BooleanNode
+    public class RandomChanceRuntimeNode : BooleanRuntimeNode
     {
         [SerializeField, Range(0F, 1F)] private float m_chance;
         

@@ -60,14 +60,6 @@ namespace LuckiusDev.Quill.Nodes.Editor
                 m_markerIndices = markers.Values.ToList();
                 m_selectedOption = Mathf.Clamp(m_selectedOption, 0, markers.Count);
             }
-            
-            public static implicit operator string(MarkerSelector markerSelector)
-            {
-                var markerNames = markerSelector.m_markerNames;
-                if (markerNames == null || markerNames.Count == 0) return string.Empty;
-                var index = Mathf.Clamp(markerSelector.m_selectedOption, 0, markerNames.Count - 1);
-                return markerNames[index];
-            }
         }
 
         

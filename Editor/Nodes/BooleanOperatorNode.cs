@@ -1,7 +1,6 @@
 using System;
 using LuckiusDev.Quill.Editor;
 using Unity.GraphToolkit.Editor;
-using UnityEngine;
 
 namespace LuckiusDev.Quill.Nodes.Editor
 {
@@ -53,19 +52,10 @@ namespace LuckiusDev.Quill.Nodes.Editor
             var aSideNodeIndex = nodeMap[GetPreviousNode($"{k_inputPortName}A")];
             var bSideNodeIndex = nodeMap[GetPreviousNode($"{k_inputPortName}B")];
 
-            var aDefaultValue = false;
-            if (op != EBooleanOperator.NONE)
-            {
-                GetInputPortByName($"{k_inputPortName}A").TryGetValue(out aDefaultValue);
-            }
-
-            var bDefaultValue = false;
-            if (op != EBooleanOperator.NONE && op != EBooleanOperator.NOT)
-            {
-                GetInputPortByName($"{k_inputPortName}B").TryGetValue(out bDefaultValue);
-            }
+            var aValueReference = GetValueReference<bool>($"{k_inputPortName}A", nodeMap);
+            var bValueReference = GetValueReference<bool>($"{k_inputPortName}B", nodeMap);
             
-            return new BooleanOperatorRuntimeNode(op, aSideNodeIndex, bSideNodeIndex, aDefaultValue, bDefaultValue);
+            return new BooleanOperatorRuntimeNode(op, aValueReference, bValueReference);
         }
     }
 }

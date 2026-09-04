@@ -36,11 +36,9 @@ namespace LuckiusDev.Quill.Nodes.Editor
             var trueNodeIndex = nodeMap[GetNextNode($"True{k_outputPortName}")];
             var falseNodeIndex = nodeMap[GetNextNode($"False{k_outputPortName}")];
 
-            var conditionNode = GetPreviousNode(k_conditionPortName);
-            var conditionNodeIndex = nodeMap[conditionNode];
-
-            GetInputPortByName(k_conditionPortName).TryGetValue<bool>(out var defaultValue);
-            return new ConditionRuntimeNode(trueNodeIndex, falseNodeIndex, conditionNodeIndex, defaultValue);
+            var valueReference = GetValueReference<bool>(k_conditionPortName, nodeMap);
+            
+            return new ConditionRuntimeNode(trueNodeIndex, falseNodeIndex, valueReference);
         }
     }
 }

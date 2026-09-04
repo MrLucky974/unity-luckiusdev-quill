@@ -31,11 +31,26 @@ namespace LuckiusDev.Quill.Editor
 
             var markerNodes = graph.GetMarkerNodes();
 
+            List<BlackboardVariable> variables = CreateVariables(graph);
             List<RuntimeNode> nodes = CreateRuntimeNodes(startNode, markerNodes);
 
-            var runtimeAsset = QuillRuntimeGraph.Create(nodes);
+            var runtimeAsset = QuillRuntimeGraph.Create(nodes, variables);
             ctx.AddObjectToAsset("RuntimeAsset", runtimeAsset);
             ctx.SetMainObject(runtimeAsset);
+        }
+
+        private static List<BlackboardVariable> CreateVariables(QuillDirectorGraph graph)
+        {
+            var variables = graph.GetVariables();
+            var runtimeVariables = new List<BlackboardVariable>();
+
+            foreach (var variable in variables)
+            {
+                BlackboardVariable runtimeVariable = QuillDirectorGraph.CreateBlackboardVariable(variable);
+                runtimeVariables.Add(runtimeVariable);
+            }
+
+            return runtimeVariables;
         }
 
         private static List<RuntimeNode> CreateRuntimeNodes(StartNode startNode, List<MarkerNode> markerNodes)

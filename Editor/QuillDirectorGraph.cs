@@ -4,6 +4,7 @@ using System.Linq;
 using LuckiusDev.Quill.Nodes.Editor;
 using Unity.GraphToolkit.Editor;
 using UnityEditor;
+using UnityEngine;
 
 namespace LuckiusDev.Quill.Editor
 {
@@ -20,6 +21,18 @@ namespace LuckiusDev.Quill.Editor
 
         public StartNode GetStartNode() => GetNodes().OfType<StartNode>().FirstOrDefault();
         public List<MarkerNode> GetMarkerNodes() => GetNodes().OfType<MarkerNode>().ToList();
+
+        internal static BlackboardVariable CreateBlackboardVariable(IVariable variable)
+        {
+            var genericType = typeof(BlackboardVariable<>).MakeGenericType(variable.DataType);
+            var genericObject = Activator.CreateInstance(genericType, variable.ID);
+
+            var bbVar = genericObject as BlackboardVariable;
+            if (variable.TryGetDefaultValue(out object val))
+                bbVar.SetValue(val);
+
+            return bbVar;
+        }
 
         /// <summary>
         /// Builds a map from graph node to runtime index, traversing from the start node
@@ -161,6 +174,21 @@ namespace LuckiusDev.Quill.Editor
             {
                 var markerSelector = jumpNode.GetMarkerSelector();
                 markerSelector.SetOptions(options);
+            }
+
+            var variableOptions = new Dictionary<Hash128, string>();
+            var variables = GetVariables();
+            foreach (var variable in variables)
+            {
+                var variableName = variable.Name;
+                var variableId = variable.ID;
+                variableOptions.Add(variableId, variableName);
+            }
+
+            foreach (var valueNode in GetNodes().OfType<SetValueNode>())
+            {
+                var variableId = valueNode.GetVariableId();
+                variableId.SetOptions(variableOptions);
             }
         }
     }

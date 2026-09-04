@@ -5,15 +5,8 @@ namespace LuckiusDev.Quill.Nodes
     {
         public void Execute(ConditionRuntimeNode node, DialogueDirector ctx)
         {
-            var conditionNode = ctx.GetNode(node.ConditionNodeIndex) as BooleanNode;
-            if (conditionNode == null)
-            {
-                ctx.JumpTo(node.DefaultValue ? node.TrueNodeIndex : node.FalseNodeIndex);
-            }
-            else
-            {
-                ctx.JumpTo(conditionNode.Evaluate(ctx) ? node.TrueNodeIndex : node.FalseNodeIndex);
-            }
+            var value = node.ValueReference?.GetValue(ctx) ?? false;
+            ctx.JumpTo(value ? node.TrueNodeIndex : node.FalseNodeIndex);
         }
     }
 }

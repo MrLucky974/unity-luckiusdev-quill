@@ -38,7 +38,7 @@ namespace LuckiusDev.Quill.Modules
                 var instance = Instantiate(m_buttonPrefab, m_choiceContainer);
                 instance.GetComponentInChildren<TMP_Text>().text = branch.Text;
 
-                var conditionNode = Director.GetNode(branch.ConditionPortIndex) as BooleanNode;
+                var conditionNode = Director.GetNode(branch.ConditionPortIndex) as BooleanRuntimeNode;
                 instance.interactable = conditionNode?.Evaluate(Director) ?? true;
                 instance.onClick.AddListener(() => Select(branch.TargetPortIndex));
             }

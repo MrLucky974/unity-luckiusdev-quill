@@ -25,6 +25,7 @@ namespace LuckiusDev.Quill
         
         private int m_currentNodeIndex;
         private IReadOnlyList<RuntimeNode> m_nodes;
+        private IReadOnlyList<BlackboardVariable> m_variables;
         
         private void Awake()
         {
@@ -62,6 +63,7 @@ namespace LuckiusDev.Quill
         private void Event_OnDialogueRequested(QuillRuntimeGraph graph)
         {
             m_nodes = graph.Nodes;
+            m_variables = graph.Variables;
             m_currentNodeIndex = 0;
             
             onDialogueStarted?.Invoke();
@@ -103,6 +105,18 @@ namespace LuckiusDev.Quill
         public RuntimeNode GetNode(int index)
         {
             return index == -1 ? null : m_nodes[index];
+        }
+
+        public bool TryGetVariable<T>(Hash128 id, out BlackboardVariable<T> outVariable)
+        {
+            foreach (var variable in m_variables)
+            {
+                outVariable = (BlackboardVariable<T>)variable;
+                if (variable.ID == id) return true;
+            }
+
+            outVariable = new BlackboardVariable<T>(id);
+            return false;
         }
 
         public void Register<TEvent>(IDialogueEventBinding<TEvent> binding) where TEvent : IQuillEvent

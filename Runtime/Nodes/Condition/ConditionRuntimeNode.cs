@@ -11,19 +11,15 @@ namespace LuckiusDev.Quill.Nodes
         
         [SerializeField] private int m_falseNodeIndex;
         public int FalseNodeIndex => m_falseNodeIndex;
-        
-        [SerializeField] private int m_conditionNodeIndex;
-        public int ConditionNodeIndex => m_conditionNodeIndex;
 
-        [SerializeField] private bool m_defaultValue;
-        public bool DefaultValue => m_defaultValue;
+        [SerializeReference] private ValueReference<bool> m_valueReference;
+        public ValueReference<bool> ValueReference => m_valueReference;
 
-        public ConditionRuntimeNode(int trueNodeIndex, int falseNodeIndex, int conditionIndex = -1, bool defaultValue = false)
+        public ConditionRuntimeNode(int trueNodeIndex, int falseNodeIndex, ValueReference<bool> valueReference)
         {
             m_trueNodeIndex = trueNodeIndex;
             m_falseNodeIndex = falseNodeIndex;
-            m_conditionNodeIndex = conditionIndex;
-            m_defaultValue = defaultValue;
+            m_valueReference = valueReference;
         }
     }
 }

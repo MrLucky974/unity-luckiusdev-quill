@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using LuckiusDev.Quill.Editor;
 using Unity.GraphToolkit.Editor;
+using UnityEngine;
 
 namespace LuckiusDev.Quill.Nodes.Editor
 {
@@ -30,7 +31,33 @@ namespace LuckiusDev.Quill.Nodes.Editor
         }
 
         public abstract RuntimeNode TranslateToRuntimeNode(NodeMap nodeMap);
-        
+
+        public ValueReference<T> GetValueReference<T>(string inputName, NodeMap nodeMap)
+        {
+            IPort inputPort = GetInputPortByName(inputName);
+
+            IPort connectedPort = inputPort?.FirstConnectedPort;
+            INode connectedNode = connectedPort?.GetNode();
+
+            if (connectedNode is IVariableNode variableNode)
+            {
+                var variable = variableNode.Variable;
+
+                variable.TryGetDefaultValue<T>(out var defaultValue);
+                return new VariableValueReference<T>(variable.ID, defaultValue);
+            }
+            else if (connectedNode is BaseNode conditionNode)
+            {
+                var conditionNodeIndex = nodeMap[conditionNode];
+                inputPort.TryGetValue<T>(out var defaultValue);
+                return new NodeValueReference<T>(conditionNodeIndex, defaultValue);
+            }
+
+            T value = default;
+            bool isConnected = inputPort?.TryGetValue<T>(out value) ?? false;
+            return isConnected ? new ValueReference<T>(value) : null;
+        }
+
         public BaseNode GetPreviousNode(string inputName)
         {
             IPort inputPort = GetInputPortByName(inputName);

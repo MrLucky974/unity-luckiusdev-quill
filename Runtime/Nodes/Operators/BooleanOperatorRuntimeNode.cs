@@ -4,29 +4,24 @@ using UnityEngine;
 namespace LuckiusDev.Quill.Nodes
 {
     [Serializable]
-    public class BooleanOperatorRuntimeNode : BooleanNode
+    public class BooleanOperatorRuntimeNode : BooleanRuntimeNode
     {
         [SerializeField] private EBooleanOperator m_operatorMode;
-        [SerializeField] private int m_aSideNodeIndex;
-        [SerializeField] private bool m_aSideDefaultValue;
-        [SerializeField] private int m_bSideNodeIndex;
-        [SerializeField] private bool m_bSideDefaultValue;
+        [SerializeReference] private ValueReference<bool> m_aSideValueReference;
+        [SerializeReference] private ValueReference<bool> m_bSideValueReference;
 
-        public BooleanOperatorRuntimeNode(EBooleanOperator op, int aSideNodeIndex, int bSideNodeIndex, bool aSideDefaultValue = false, bool bSideDefaultValue = false)
+        public BooleanOperatorRuntimeNode(EBooleanOperator op, ValueReference<bool> aSideValueReference, ValueReference<bool> bSideValueReference)
         {
             m_operatorMode = op;
-            
-            m_aSideNodeIndex = aSideNodeIndex;
-            m_aSideDefaultValue = aSideDefaultValue;
-            
-            m_bSideNodeIndex = bSideNodeIndex;
-            m_bSideDefaultValue = bSideDefaultValue;
+
+            m_aSideValueReference = aSideValueReference;
+            m_bSideValueReference = bSideValueReference;
         }
 
         public override bool Evaluate(DialogueDirector ctx)
         {
-            bool aValue = (ctx.GetNode(m_aSideNodeIndex) as BooleanNode)?.Evaluate(ctx) ?? m_aSideDefaultValue;
-            bool bValue = (ctx.GetNode(m_bSideNodeIndex) as BooleanNode)?.Evaluate(ctx) ?? m_bSideDefaultValue;
+            bool aValue = m_aSideValueReference?.GetValue(ctx) ?? false;
+            bool bValue = m_bSideValueReference?.GetValue(ctx) ?? false;
 
             return m_operatorMode switch
             {
