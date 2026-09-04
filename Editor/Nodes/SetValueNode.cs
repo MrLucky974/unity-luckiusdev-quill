@@ -9,7 +9,6 @@ using UnityEditor;
 using UnityEditor.UIElements;
 using UnityEngine;
 using UnityEngine.UIElements;
-using static LuckiusDev.Quill.Nodes.Editor.JumpNode;
 
 namespace LuckiusDev.Quill.Editor
 {
@@ -21,7 +20,8 @@ namespace LuckiusDev.Quill.Editor
         protected override void OnDefineOptions(IOptionDefinitionContext context)
         {
             context.AddOption<VariableId>(k_variableOptionName)
-                .WithDisplayName("Variable");
+                .WithDisplayName("Variable")
+                .Delayed();
         }
 
         internal VariableId GetVariableId()
@@ -35,6 +35,8 @@ namespace LuckiusDev.Quill.Editor
             GetNodeOptionByName(k_variableOptionName).TrySetValue(variableId);
             return variableId;
         }
+
+        internal abstract Type GetVariableType();
     }
 
     [Serializable]

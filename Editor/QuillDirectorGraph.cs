@@ -177,18 +177,35 @@ namespace LuckiusDev.Quill.Editor
             }
 
             var variableOptions = new Dictionary<Hash128, string>();
+            var variableTypes = new Dictionary<Type, List<Hash128>>();
             var variables = GetVariables();
             foreach (var variable in variables)
             {
+                var variableType = variable.DataType;
                 var variableName = variable.Name;
                 var variableId = variable.ID;
+                
+                if (variableTypes.ContainsKey(variableType))
+                {
+                    variableTypes[variableType].Add(variableId);
+                }
+                else
+                {
+                    variableTypes.Add(variableType, new List<Hash128>() { variableId });
+                }
+
                 variableOptions.Add(variableId, variableName);
             }
 
             foreach (var valueNode in GetNodes().OfType<SetValueNode>())
             {
                 var variableId = valueNode.GetVariableId();
-                variableId.SetOptions(variableOptions);
+                var variableType = valueNode.GetVariableType();
+
+                variableTypes.TryGetValue(variableType, out List<Hash128> ids);
+                variableId.SetOptions(variableOptions
+                    .Where(o => variableTypes.TryGetValue(variableType, out List<Hash128> ids) && ids.Contains(o.Key))
+                    .ToDictionary(v => v.Key, v => v.Value));
             }
         }
     }
