@@ -1,57 +1,24 @@
 using System;
-using LuckiusDev.Quill.Editor;
 using Unity.GraphToolkit.Editor;
 
 namespace LuckiusDev.Quill.Nodes.Editor
 {
     [Serializable]
     [Node("Nodes/Value/Operators", "", "Float Operator")]
-    internal class FloatOperatorNode : BaseNode
+    internal class FloatOperatorNode : OperatorNode<float, EArithmeticOperator>
     {
-        public const string k_operatorOptionName = "Operator";
-        
-        protected override void OnDefineOptions(IOptionDefinitionContext context)
+        protected override EArithmeticOperator GetDefaultEnumValue()
         {
-            context.AddOption<EArithmeticOperator>(k_operatorOptionName)
-                .WithDefaultValue(EArithmeticOperator.ADD)
-                .Delayed();
+            return EArithmeticOperator.ADD;
         }
 
-        protected override void OnDefinePorts(IPortDefinitionContext context)
+        protected override bool IsSingleOperator(EArithmeticOperator enumValue)
         {
-            var op = GetOperatorMode();
-            
-            context.AddOutputPort<float>(k_outputPortName)
-                .WithDisplayName("Output")
-                .Build();
-            
-            context.AddInputPort<float>($"{k_inputPortName}A")
-                .WithCapacity(PortCapacity.Single)
-                .WithDisplayName("Input A")
-                .Build();
-            
-            context.AddInputPort<float>($"{k_inputPortName}B")
-                .WithCapacity(PortCapacity.Single)
-                .WithDisplayName("Input B")
-                .Build();
+            return false;
         }
 
-        private EArithmeticOperator GetOperatorMode()
+        protected override OperatorRuntimeNode<float, EArithmeticOperator> CreateRuntimeNode(EArithmeticOperator op, ValueReference<float> aValueReference, ValueReference<float> bValueReference)
         {
-            EArithmeticOperator op = EArithmeticOperator.ADD;
-            GetNodeOptionByName(k_operatorOptionName)?.TryGetValue(out op);
-            return op;
-        }
-
-        public override RuntimeNode TranslateToRuntimeNode(NodeMap nodeMap)
-        {
-            var op = GetOperatorMode();
-            var aSideNodeIndex = nodeMap[GetPreviousNode($"{k_inputPortName}A")];
-            var bSideNodeIndex = nodeMap[GetPreviousNode($"{k_inputPortName}B")];
-
-            var aValueReference = GetValueReference<float>($"{k_inputPortName}A", nodeMap);
-            var bValueReference = GetValueReference<float>($"{k_inputPortName}B", nodeMap);
-            
             return new FloatOperatorRuntimeNode(op, aValueReference, bValueReference);
         }
     }

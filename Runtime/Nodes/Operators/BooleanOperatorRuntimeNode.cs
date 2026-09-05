@@ -4,26 +4,15 @@ using UnityEngine;
 namespace LuckiusDev.Quill.Nodes
 {
     [Serializable]
-    public class BooleanOperatorRuntimeNode : BooleanRuntimeNode
+    public class BooleanOperatorRuntimeNode : OperatorRuntimeNode<bool, EBooleanOperator>
     {
-        [SerializeField] private EBooleanOperator m_operatorMode;
-        [SerializeReference] private ValueReference<bool> m_aSideValueReference;
-        [SerializeReference] private ValueReference<bool> m_bSideValueReference;
-
-        public BooleanOperatorRuntimeNode(EBooleanOperator op, ValueReference<bool> aSideValueReference, ValueReference<bool> bSideValueReference)
+        public BooleanOperatorRuntimeNode(EBooleanOperator op, ValueReference<bool> aSideValueReference, ValueReference<bool> bSideValueReference) : base(op, aSideValueReference, bSideValueReference)
         {
-            m_operatorMode = op;
-
-            m_aSideValueReference = aSideValueReference;
-            m_bSideValueReference = bSideValueReference;
         }
 
-        public override bool Evaluate(DialogueDirector ctx)
+        protected override bool Calculate(EBooleanOperator op, bool aValue, bool bValue)
         {
-            bool aValue = m_aSideValueReference?.GetValue(ctx) ?? false;
-            bool bValue = m_bSideValueReference?.GetValue(ctx) ?? false;
-
-            return m_operatorMode switch
+            return op switch
             {
                 EBooleanOperator.AND => aValue && bValue,
                 EBooleanOperator.OR => aValue || bValue,

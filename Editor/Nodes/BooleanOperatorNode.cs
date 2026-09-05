@@ -1,59 +1,24 @@
 using System;
-using LuckiusDev.Quill.Editor;
 using Unity.GraphToolkit.Editor;
 
 namespace LuckiusDev.Quill.Nodes.Editor
 {
     [Serializable]
     [Node("Nodes/Value/Operators", "", "Boolean Operator")]
-    internal class BooleanOperatorNode : BaseNode
+    internal class BooleanOperatorNode : OperatorNode<bool, EBooleanOperator>
     {
-        public const string k_operatorOptionName = "BooleanOperator";
-        
-        protected override void OnDefineOptions(IOptionDefinitionContext context)
+        protected override EBooleanOperator GetDefaultEnumValue()
         {
-            context.AddOption<EBooleanOperator>(k_operatorOptionName)
-                .WithDefaultValue(EBooleanOperator.OR)
-                .Delayed();
+            return EBooleanOperator.OR;
         }
 
-        protected override void OnDefinePorts(IPortDefinitionContext context)
+        protected override bool IsSingleOperator(EBooleanOperator enumValue)
         {
-            var op = GetOperatorMode();
-            
-            context.AddOutputPort<bool>(k_outputPortName)
-                .WithDisplayName("Output")
-                .Build();
-            
-            context.AddInputPort<bool>($"{k_inputPortName}A")
-                .WithCapacity(PortCapacity.Single)
-                .WithDisplayName(op == EBooleanOperator.NOT ? "Input" : "Input A")
-                .Build();
-
-            if (op == EBooleanOperator.NOT) return;
-            
-            context.AddInputPort<bool>($"{k_inputPortName}B")
-                .WithCapacity(PortCapacity.Single)
-                .WithDisplayName("Input B")
-                .Build();
+            return enumValue == EBooleanOperator.NOT;
         }
 
-        private EBooleanOperator GetOperatorMode()
+        protected override OperatorRuntimeNode<bool, EBooleanOperator> CreateRuntimeNode(EBooleanOperator op, ValueReference<bool> aValueReference, ValueReference<bool> bValueReference)
         {
-            EBooleanOperator op = EBooleanOperator.OR;
-            GetNodeOptionByName(k_operatorOptionName)?.TryGetValue(out op);
-            return op;
-        }
-
-        public override RuntimeNode TranslateToRuntimeNode(NodeMap nodeMap)
-        {
-            var op = GetOperatorMode();
-            var aSideNodeIndex = nodeMap[GetPreviousNode($"{k_inputPortName}A")];
-            var bSideNodeIndex = nodeMap[GetPreviousNode($"{k_inputPortName}B")];
-
-            var aValueReference = GetValueReference<bool>($"{k_inputPortName}A", nodeMap);
-            var bValueReference = GetValueReference<bool>($"{k_inputPortName}B", nodeMap);
-            
             return new BooleanOperatorRuntimeNode(op, aValueReference, bValueReference);
         }
     }

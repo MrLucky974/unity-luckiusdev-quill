@@ -123,7 +123,7 @@ MonoBehaviour:
           x: -108
           y: 456
           width: 9154.4
-          height: 1276.7999
+          height: 1335.2
         m_GraphElementMetaData:
         - m_Guid:
             m_Value0: 18026269230871776612
@@ -3155,11 +3155,13 @@ MonoBehaviour:
         m_State: 0
         m_InputConstantsById:
           m_KeyList:
-          - __option_BooleanOperator
           - inA
+          - __option_Operator
+          - inB
           m_ValueList:
-          - rid: 7933848411618148670
           - rid: 7933848411618148671
+          - rid: 7933848431141322867
+          - rid: 7933848431141322868
         m_InputPortInfos:
           expandedPortsById:
             m_KeyList: []
@@ -3175,15 +3177,6 @@ MonoBehaviour:
           m_HasUserColor: 0
         m_Node:
           rid: 7933848411618148673
-    - rid: 7933848411618148670
-      type: {class: EnumConstant, ns: Unity.GraphToolkit.Editor, asm: UnityEditor.GraphToolkitModule}
-      data:
-        m_Value:
-          m_EnumType:
-            m_Identification: LuckiusDev.Quill.Nodes.EBooleanOperator, LuckiusDev.Quill, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
-          m_Value: 3
-        m_EnumType:
-          m_Identification: LuckiusDev.Quill.Nodes.EBooleanOperator, LuckiusDev.Quill, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
     - rid: 7933848411618148671
       type: {class: 'Constant`1[[System.Boolean, mscorlib]]', ns: Unity.GraphToolkit.Editor, asm: UnityEditor.GraphToolkitModule}
       data:
@@ -3664,7 +3657,7 @@ MonoBehaviour:
           serializedVersion: 2
           Hash: 78f5343fcb01e107157c8fa31490150a
         m_Version: 2
-        m_Position: {x: 8132.801, y: 1582.4695}
+        m_Position: {x: 8138.3975, y: 1641.2362}
         m_Title: 
         m_Tooltip: 
         m_NodePreviewModel:
@@ -3902,3 +3895,16 @@ MonoBehaviour:
           m_PortDirection: 1
           m_PortOrientation: 0
           m_Title: Value
+    - rid: 7933848431141322867
+      type: {class: EnumConstant, ns: Unity.GraphToolkit.Editor, asm: UnityEditor.GraphToolkitModule}
+      data:
+        m_Value:
+          m_EnumType:
+            m_Identification: LuckiusDev.Quill.Nodes.EBooleanOperator, LuckiusDev.Quill, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
+          m_Value: 1
+        m_EnumType:
+          m_Identification: LuckiusDev.Quill.Nodes.EBooleanOperator, LuckiusDev.Quill, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
+    - rid: 7933848431141322868
+      type: {class: 'Constant`1[[System.Boolean, mscorlib]]', ns: Unity.GraphToolkit.Editor, asm: UnityEditor.GraphToolkitModule}
+      data:
+        m_Value: 0
