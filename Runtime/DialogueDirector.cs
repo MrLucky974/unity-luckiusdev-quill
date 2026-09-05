@@ -111,8 +111,11 @@ namespace LuckiusDev.Quill
         {
             foreach (var variable in m_variables)
             {
-                outVariable = (BlackboardVariable<T>)variable;
-                if (variable.ID == id) return true;
+                if (variable.ID == id)
+                {
+                    outVariable = (BlackboardVariable<T>)variable;
+                    return true;
+                }
             }
 
             outVariable = new BlackboardVariable<T>(id);
