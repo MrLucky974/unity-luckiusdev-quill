@@ -5,15 +5,15 @@ using Unity.GraphToolkit.Editor;
 namespace LuckiusDev.Quill.Nodes.Editor
 {
     [Serializable]
-    [Node("Nodes/Value/Operators", "", "Boolean Operator")]
-    internal class BooleanOperatorNode : BaseNode
+    [Node("Nodes/Value/Operators", "", "Float Operator")]
+    internal class FloatOperatorNode : BaseNode
     {
-        public const string k_operatorOptionName = "BooleanOperator";
+        public const string k_operatorOptionName = "Operator";
         
         protected override void OnDefineOptions(IOptionDefinitionContext context)
         {
-            context.AddOption<EBooleanOperator>(k_operatorOptionName)
-                .WithDefaultValue(EBooleanOperator.OR)
+            context.AddOption<EArithmeticOperator>(k_operatorOptionName)
+                .WithDefaultValue(EArithmeticOperator.ADD)
                 .Delayed();
         }
 
@@ -21,26 +21,24 @@ namespace LuckiusDev.Quill.Nodes.Editor
         {
             var op = GetOperatorMode();
             
-            context.AddOutputPort<bool>(k_outputPortName)
+            context.AddOutputPort<float>(k_outputPortName)
                 .WithDisplayName("Output")
                 .Build();
             
-            context.AddInputPort<bool>($"{k_inputPortName}A")
+            context.AddInputPort<float>($"{k_inputPortName}A")
                 .WithCapacity(PortCapacity.Single)
-                .WithDisplayName(op == EBooleanOperator.NOT ? "Input" : "Input A")
+                .WithDisplayName("Input A")
                 .Build();
-
-            if (op == EBooleanOperator.NOT) return;
             
-            context.AddInputPort<bool>($"{k_inputPortName}B")
+            context.AddInputPort<float>($"{k_inputPortName}B")
                 .WithCapacity(PortCapacity.Single)
                 .WithDisplayName("Input B")
                 .Build();
         }
 
-        private EBooleanOperator GetOperatorMode()
+        private EArithmeticOperator GetOperatorMode()
         {
-            EBooleanOperator op = EBooleanOperator.OR;
+            EArithmeticOperator op = EArithmeticOperator.ADD;
             GetNodeOptionByName(k_operatorOptionName)?.TryGetValue(out op);
             return op;
         }
@@ -51,10 +49,10 @@ namespace LuckiusDev.Quill.Nodes.Editor
             var aSideNodeIndex = nodeMap[GetPreviousNode($"{k_inputPortName}A")];
             var bSideNodeIndex = nodeMap[GetPreviousNode($"{k_inputPortName}B")];
 
-            var aValueReference = GetValueReference<bool>($"{k_inputPortName}A", nodeMap);
-            var bValueReference = GetValueReference<bool>($"{k_inputPortName}B", nodeMap);
+            var aValueReference = GetValueReference<float>($"{k_inputPortName}A", nodeMap);
+            var bValueReference = GetValueReference<float>($"{k_inputPortName}B", nodeMap);
             
-            return new BooleanOperatorRuntimeNode(op, aValueReference, bValueReference);
+            return new FloatOperatorRuntimeNode(op, aValueReference, bValueReference);
         }
     }
 }
