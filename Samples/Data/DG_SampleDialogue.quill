@@ -2551,7 +2551,7 @@ MonoBehaviour:
           serializedVersion: 2
           Hash: 3b3a63facb70d75d4b2e5d45c1b5d3f3
         m_Version: 2
-        m_Position: {x: 6668.4116, y: 732.8037}
+        m_Position: {x: 6694.303, y: 732.8037}
         m_Title: 
         m_Tooltip: 
         m_NodePreviewModel:
@@ -3157,11 +3157,9 @@ MonoBehaviour:
           m_KeyList:
           - inA
           - __option_Operator
-          - inB
           m_ValueList:
           - rid: 7933848411618148671
           - rid: 7933848431141322867
-          - rid: 7933848431141322868
         m_InputPortInfos:
           expandedPortsById:
             m_KeyList: []
@@ -3901,10 +3899,6 @@ MonoBehaviour:
         m_Value:
           m_EnumType:
             m_Identification: LuckiusDev.Quill.Nodes.EBooleanOperator, LuckiusDev.Quill, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
-          m_Value: 1
+          m_Value: 3
         m_EnumType:
           m_Identification: LuckiusDev.Quill.Nodes.EBooleanOperator, LuckiusDev.Quill, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
-    - rid: 7933848431141322868
-      type: {class: 'Constant`1[[System.Boolean, mscorlib]]', ns: Unity.GraphToolkit.Editor, asm: UnityEditor.GraphToolkitModule}
-      data:
-        m_Value: 0
