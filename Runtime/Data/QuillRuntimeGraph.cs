@@ -11,7 +11,7 @@ namespace LuckiusDev.Quill
         public IReadOnlyList<RuntimeNode> Nodes => m_nodes;
 
         [SerializeReference] private List<BlackboardVariable> m_variables = new();
-        public IReadOnlyList<BlackboardVariable> Variables => new List<BlackboardVariable>(m_variables);
+        public IReadOnlyList<BlackboardVariable> Variables => m_variables;
 
         public static QuillRuntimeGraph Create(List<RuntimeNode> nodes, List<BlackboardVariable> variables)
         {

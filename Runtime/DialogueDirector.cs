@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using LuckiusDev.Quill.Events;
 using LuckiusDev.Quill.Nodes;
 using UnityEngine;
@@ -63,7 +64,9 @@ namespace LuckiusDev.Quill
         private void Event_OnDialogueRequested(QuillRuntimeGraph graph)
         {
             m_nodes = graph.Nodes;
-            m_variables = graph.Variables;
+            m_variables = graph.Variables
+                .Select(variable => variable.Clone())
+                .ToList();
             m_currentNodeIndex = 0;
             
             onDialogueStarted?.Invoke();

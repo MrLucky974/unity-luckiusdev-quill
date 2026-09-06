@@ -25,12 +25,11 @@ namespace LuckiusDev.Quill.Editor
         internal static BlackboardVariable CreateBlackboardVariable(IVariable variable)
         {
             var genericType = typeof(BlackboardVariable<>).MakeGenericType(variable.DataType);
-            var genericObject = Activator.CreateInstance(genericType, variable.ID);
+
+            variable.TryGetDefaultValue(out object value);
+            var genericObject = Activator.CreateInstance(genericType, variable.ID, value);
 
             var bbVar = genericObject as BlackboardVariable;
-            if (variable.TryGetDefaultValue(out object val))
-                bbVar.SetValue(val);
-
             return bbVar;
         }
 
