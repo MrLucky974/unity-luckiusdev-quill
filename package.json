@@ -1,7 +1,7 @@
 {
   "name": "io.github.mrlucky974.unity-luckiusdev-quill",
   "displayName": "LuckiusDev Quill",
-  "version": "1.1.0",
+  "version": "1.2.0",
   "unity": "6000.6",
   "description": "A flexible dialogue system made using Graph Toolkit",
   "author": {
