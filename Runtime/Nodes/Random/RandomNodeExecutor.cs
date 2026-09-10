@@ -5,12 +5,12 @@ namespace LuckiusDev.Quill.Nodes
     [NodeExecutor(typeof(RandomRuntimeNode))]
     public class RandomNodeExecutor : INodeExecutor<RandomRuntimeNode>
     {
-        public void Execute(RandomRuntimeNode node, DialogueDirector ctx)
+        public void Execute(RandomRuntimeNode node, IDialogueContext ctx)
         {
             var indexes = node.NodeIndexes;
             if (indexes == null || indexes.Count == 0)
             {
-                ctx.Stop();
+                Debug.LogWarning("[RandomNodeExecutor] No nodes were connected to random node.");
                 return;
             }
             

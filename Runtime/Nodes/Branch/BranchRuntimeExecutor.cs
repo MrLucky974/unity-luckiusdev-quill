@@ -5,7 +5,7 @@ namespace LuckiusDev.Quill.Nodes
     [NodeExecutor(typeof(BranchRuntimeNode))]
     public class BranchRuntimeExecutor : INodeExecutor<BranchRuntimeNode>
     {
-        public void Execute(BranchRuntimeNode node, DialogueDirector ctx)
+        public void Execute(BranchRuntimeNode node, IDialogueContext ctx)
         {
             var e = new BranchPathRequestedEvent(node.Branches);
             ctx.Raise(e);

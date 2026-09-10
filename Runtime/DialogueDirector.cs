@@ -1,16 +1,15 @@
 using System;
 using System.Collections.Generic;
-using System.Linq;
 using LuckiusDev.Quill.Events;
 using LuckiusDev.Quill.Nodes;
 using UnityEngine;
 
 namespace LuckiusDev.Quill
 {
-    public sealed class DialogueDirector : MonoBehaviour
+    public sealed class DialogueDirector : MonoBehaviour, IDialogueContext
     {
         private static event Action<QuillRuntimeGraph> onDialogueRequestedEvent;
-        
+
         public event Action onDialogueStarted;
         public event Action onDialogueEnded;
         public event Action onActionPerformed;
@@ -20,14 +19,12 @@ namespace LuckiusDev.Quill
         [Header("Debug")]        
         [SerializeField] private bool m_debugMode;
         [SerializeField] private QuillRuntimeGraph m_testGraph;
-        
+
         private IReadOnlyDictionary<Type, INodeExecutor> m_executors;
         private readonly Dictionary<Type, object> m_bindings = new();
-        
-        private int m_currentNodeIndex;
-        private IReadOnlyList<RuntimeNode> m_nodes;
-        private IReadOnlyList<BlackboardVariable> m_variables;
-        
+
+        private DialogueSession m_session;
+
         private void Awake()
         {
             m_executors = NodeExecutorRegistry.Executors;
@@ -55,27 +52,27 @@ namespace LuckiusDev.Quill
         {
             onDialogueRequestedEvent?.Invoke(graph);
         }
-        
+
         private void Event_OnInputPressed()
         {
             onActionPerformed?.Invoke();
         }
-        
+
         private void Event_OnDialogueRequested(QuillRuntimeGraph graph)
         {
-            m_nodes = graph.Nodes;
-            m_variables = graph.Variables
-                .Select(variable => variable.Clone())
-                .ToList();
-            m_currentNodeIndex = 0;
-            
+            m_session = DialogueSession.CreateFromGraph(graph);
+
             onDialogueStarted?.Invoke();
             ProcessNode();
         }
 
         private void ProcessNode()
         {
-            var node = m_nodes[m_currentNodeIndex];
+            if (!m_session.TryGetNode<RuntimeNode>(m_session.CurrentNodeIndex, out var node))
+            {
+                Debug.LogError($"[DialogueDirector] No node found at index '{m_session.CurrentNodeIndex}'.");
+                return;
+            }
 
             if (m_executors.TryGetValue(node.GetType(), out var executor))
             {
@@ -94,8 +91,8 @@ namespace LuckiusDev.Quill
                 Stop();
                 return;
             }
-            
-            m_currentNodeIndex = nodeIndex;
+
+            m_session.CurrentNodeIndex = nodeIndex;
             ProcessNode();
         }
 
@@ -105,24 +102,14 @@ namespace LuckiusDev.Quill
             onDialogueEnded?.Invoke();
         }
 
-        public RuntimeNode GetNode(int index)
+        public bool TryGetNode<T>(int index, out T node) where T : RuntimeNode
         {
-            return index == -1 ? null : m_nodes[index];
+            return m_session.TryGetNode(index, out node);
         }
 
         public bool TryGetVariable<T>(Hash128 id, out BlackboardVariable<T> outVariable)
         {
-            foreach (var variable in m_variables)
-            {
-                if (variable.ID == id)
-                {
-                    outVariable = (BlackboardVariable<T>)variable;
-                    return true;
-                }
-            }
-
-            outVariable = new BlackboardVariable<T>(id);
-            return false;
+            return m_session.TryGetVariable(id, out outVariable);
         }
 
         public void Register<TEvent>(IDialogueEventBinding<TEvent> binding) where TEvent : IQuillEvent
@@ -143,7 +130,7 @@ namespace LuckiusDev.Quill
 
             bindings.Add(binding);
         }
-        
+
         public void Deregister<TEvent>(IDialogueEventBinding<TEvent> binding) where TEvent : IQuillEvent
         {
             if (binding == null)
@@ -184,7 +171,7 @@ namespace LuckiusDev.Quill
                 }
             }
         }
-        
+
         private List<IDialogueEventBinding<TEvent>> GetOrCreateBindingList<TEvent>() where TEvent : IQuillEvent
         {
             var type = typeof(TEvent);

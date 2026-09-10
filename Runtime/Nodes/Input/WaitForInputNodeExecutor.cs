@@ -3,7 +3,7 @@ namespace LuckiusDev.Quill.Nodes
     [NodeExecutor(typeof(WaitForInputRuntimeNode))]
     public class WaitForInputNodeExecutor : FlowNodeExecutor<WaitForInputRuntimeNode>
     {
-        public override void Execute(WaitForInputRuntimeNode node, DialogueDirector ctx)
+        public override void Execute(WaitForInputRuntimeNode node, IDialogueContext ctx)
         {
             ctx.onActionPerformed += OnActionPerformed;
             

@@ -6,7 +6,7 @@ namespace LuckiusDev.Quill.Nodes
     [NodeExecutor(typeof(SetBackgroundRuntimeNode))]
     public class SetBackgroundNodeExecutor : FlowNodeExecutor<SetBackgroundRuntimeNode>
     {
-        public override void Execute(SetBackgroundRuntimeNode runtimeNode, DialogueDirector ctx)
+        public override void Execute(SetBackgroundRuntimeNode runtimeNode, IDialogueContext ctx)
         {
             var backgroundSprite = runtimeNode.BackgroundSprite;
             Debug.Log($"Set background to {backgroundSprite}.", backgroundSprite);

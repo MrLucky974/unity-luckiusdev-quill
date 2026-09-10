@@ -19,7 +19,7 @@ namespace LuckiusDev.Quill
 
         public ValueReference() : this(default) { }
 
-        public virtual T GetValue(DialogueDirector ctx) => m_defaultValue;
+        public virtual T GetValue(IDialogueContext ctx) => m_defaultValue;
     }
 
     [Serializable]
@@ -33,10 +33,9 @@ namespace LuckiusDev.Quill
             m_referenceNodeIndex = referenceNodeIndex;
         }
 
-        public override T GetValue(DialogueDirector ctx)
+        public override T GetValue(IDialogueContext ctx)
         {
-            var conditionNode = ctx.GetNode(m_referenceNodeIndex) as ValueRuntimeNode<T>;
-            return conditionNode == null ? m_defaultValue : conditionNode.Evaluate(ctx);
+            return ctx.TryGetNode<ValueRuntimeNode<T>>(m_referenceNodeIndex, out var node) ? node.Evaluate(ctx) : m_defaultValue;
         }
     }
 
@@ -51,15 +50,9 @@ namespace LuckiusDev.Quill
             m_variableIdentifier = variableIdentifier;
         }
 
-        public override T GetValue(DialogueDirector ctx)
+        public override T GetValue(IDialogueContext ctx)
         {
-            if (ctx.TryGetVariable<T>(m_variableIdentifier, out var variable))
-            {
-                return variable.Value;
-            }
-            {
-                return m_defaultValue;
-            }
+            return ctx.TryGetVariable<T>(m_variableIdentifier, out var variable) ? variable.Value : m_defaultValue;
         }
     }
 }

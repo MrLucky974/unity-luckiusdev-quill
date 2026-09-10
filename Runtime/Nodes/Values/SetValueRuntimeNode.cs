@@ -16,13 +16,20 @@ namespace LuckiusDev.Quill
             m_newValueReference = newValueReference;
         }
 
-        public void SetValue(DialogueDirector ctx)
+        public void SetValue(IDialogueContext ctx)
         {
-            if (ctx.TryGetVariable<T>(m_variableIdentifier, out var variable))
+            var wasVariableFound = ctx.TryGetVariable<T>(m_variableIdentifier, out var variable);
+            if (!wasVariableFound)
             {
-                var newValue = m_newValueReference.GetValue(ctx);
-                variable.SetValue(newValue);
+                Debug.Log($"[{nameof(SetValueRuntimeNode<T>)}] Variable with id '{m_variableIdentifier}' could not be found.");
+                return;
             }
+            
+            var currentValue = variable.Value;
+            var newValue = m_newValueReference.GetValue(ctx);
+            variable.SetValue(newValue);
+            
+            Debug.Log($"[{nameof(SetValueRuntimeNode<T>)}] Variable '{m_variableIdentifier}' has been set to {newValue} from {currentValue}.");
         }
     }
 }

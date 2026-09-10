@@ -18,7 +18,7 @@ namespace LuckiusDev.Quill.Nodes
             m_bSideValueReference = bSideValueReference;
         }
 
-        public override TValue Evaluate(DialogueDirector ctx)
+        public override TValue Evaluate(IDialogueContext ctx)
         {
             TValue aValue = m_aSideValueReference != null ? m_aSideValueReference.GetValue(ctx) : default;
             TValue bValue = m_bSideValueReference != null ? m_bSideValueReference.GetValue(ctx) : default;

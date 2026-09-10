@@ -14,7 +14,7 @@ namespace LuckiusDev.Quill.Nodes
             m_chance = Mathf.Clamp01(chance);
         }
 
-        public override bool Evaluate(DialogueDirector ctx)
+        public override bool Evaluate(IDialogueContext ctx)
         {
             return Random.value <= m_chance;
         }
