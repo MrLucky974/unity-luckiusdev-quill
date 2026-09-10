@@ -1,14 +1,10 @@
-﻿using LuckiusDev.Quill.Nodes;
-using System;
+﻿using System;
 using UnityEngine;
 
 namespace LuckiusDev.Quill
 {
     [Serializable]
-    public abstract class ValueReference
-    {
-
-    }
+    public abstract class ValueReference { }
 
     [Serializable]
     public class ValueReference<T> : ValueReference
@@ -40,14 +36,7 @@ namespace LuckiusDev.Quill
         public override T GetValue(DialogueDirector ctx)
         {
             var conditionNode = ctx.GetNode(m_referenceNodeIndex) as ValueRuntimeNode<T>;
-            if (conditionNode == null)
-            {
-                return m_defaultValue;
-            }
-            else
-            {
-                return conditionNode.Evaluate(ctx);
-            }
+            return conditionNode == null ? m_defaultValue : conditionNode.Evaluate(ctx);
         }
     }
 
