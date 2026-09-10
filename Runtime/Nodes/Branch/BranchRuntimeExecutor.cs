@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using LuckiusDev.Quill.Events;
 
 namespace LuckiusDev.Quill.Nodes
@@ -7,7 +8,15 @@ namespace LuckiusDev.Quill.Nodes
     {
         public void Execute(BranchRuntimeNode node, IDialogueContext ctx)
         {
-            var e = new BranchPathRequestedEvent(node.Branches);
+            var options = new List<BranchOption>(node.Branches.Count);
+
+            foreach (var branch in node.Branches)
+            {
+                var isInteractable = branch.ValueReference?.GetValue(ctx) ?? true;
+                options.Add(new BranchOption(branch.Text, branch.TargetPortIndex, isInteractable));
+            }
+
+            var e = new BranchPathRequestedEvent(options);
             ctx.Raise(e);
         }
     }

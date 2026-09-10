@@ -5,11 +5,11 @@ namespace LuckiusDev.Quill.Events
 {
     public readonly struct BranchPathRequestedEvent : IQuillEvent
     {
-        public readonly IReadOnlyList<BranchData> Branches;
+        public readonly IReadOnlyList<BranchOption> Options;
         
-        public BranchPathRequestedEvent(IReadOnlyList<BranchData> branches)
+        public BranchPathRequestedEvent(IReadOnlyList<BranchOption> options)
         {
-            Branches = branches;
+            Options = options;
         }
     }
 }

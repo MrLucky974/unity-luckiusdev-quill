@@ -33,14 +33,13 @@ namespace LuckiusDev.Quill.Modules
                 Destroy(child.gameObject);
             }
 
-            foreach (var branch in e.Branches)
+            foreach (var option in e.Options)
             {
                 var instance = Instantiate(m_buttonPrefab, m_choiceContainer);
-                instance.GetComponentInChildren<TMP_Text>().text = branch.Text;
-
-                /*var conditionNode = Director.GetNode(branch.ConditionPortIndex) as BooleanRuntimeNode;
-                instance.interactable = conditionNode?.Evaluate(Director) ?? true;*/
-                instance.onClick.AddListener(() => Select(branch.TargetPortIndex));
+                
+                instance.GetComponentInChildren<TMP_Text>().text = option.Text;
+                instance.interactable = option.IsInteractable;
+                instance.onClick.AddListener(() => Select(option.TargetPortIndex));
             }
         }
 

@@ -8,18 +8,18 @@ namespace LuckiusDev.Quill.Nodes
     {
         [SerializeField] private string m_text;
         public string Text => m_text;
-
-        [SerializeField] private int m_conditionPortIndex;
-        public int ConditionPortIndex => m_conditionPortIndex;
         
         [SerializeField] private int m_targetPortIndex;
         public int TargetPortIndex => m_targetPortIndex;
 
-        public BranchData(string text, int targetIndex, int conditionIndex = -1)
+        [SerializeReference] private ValueReference<bool> m_valueReference;
+        public ValueReference<bool> ValueReference => m_valueReference;
+
+        public BranchData(string text, int targetIndex, ValueReference<bool> valueReference)
         {
             m_text = text;
             m_targetPortIndex = targetIndex;
-            m_conditionPortIndex = conditionIndex;
+            m_valueReference = valueReference;
         }
     }
 }

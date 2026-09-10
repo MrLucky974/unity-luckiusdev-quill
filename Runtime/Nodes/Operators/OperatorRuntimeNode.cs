@@ -10,7 +10,7 @@ namespace LuckiusDev.Quill.Nodes
         [SerializeReference] private ValueReference<TValue> m_aSideValueReference;
         [SerializeReference] private ValueReference<TValue> m_bSideValueReference;
 
-        public OperatorRuntimeNode(TEnum op, ValueReference<TValue> aSideValueReference, ValueReference<TValue> bSideValueReference)
+        protected OperatorRuntimeNode(TEnum op, ValueReference<TValue> aSideValueReference, ValueReference<TValue> bSideValueReference)
         {
             m_operatorMode = op;
 

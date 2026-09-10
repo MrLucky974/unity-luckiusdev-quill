@@ -39,22 +39,25 @@ namespace LuckiusDev.Quill.Nodes.Editor
             IPort connectedPort = inputPort?.FirstConnectedPort;
             INode connectedNode = connectedPort?.GetNode();
 
-            if (connectedNode is IVariableNode variableNode)
+            switch (connectedNode)
             {
-                var variable = variableNode.Variable;
+                case IVariableNode variableNode:
+                {
+                    var variable = variableNode.Variable;
 
-                variable.TryGetDefaultValue<T>(out var defaultValue);
-                return new VariableValueReference<T>(variable.ID, defaultValue);
-            }
-            else if (connectedNode is BaseNode conditionNode)
-            {
-                var conditionNodeIndex = nodeMap[conditionNode];
-                inputPort.TryGetValue<T>(out var defaultValue);
-                return new NodeValueReference<T>(conditionNodeIndex, defaultValue);
+                    variable.TryGetDefaultValue<T>(out var defaultValue);
+                    return new VariableValueReference<T>(variable.ID, defaultValue);
+                }
+                case BaseNode conditionNode:
+                {
+                    var conditionNodeIndex = nodeMap[conditionNode];
+                    inputPort.TryGetValue<T>(out var defaultValue);
+                    return new NodeValueReference<T>(conditionNodeIndex, defaultValue);
+                }
             }
 
             T value = default;
-            bool isConnected = inputPort?.TryGetValue<T>(out value) ?? false;
+            bool isConnected = inputPort?.TryGetValue(out value) ?? false;
             return isConnected ? new ValueReference<T>(value) : null;
         }
 

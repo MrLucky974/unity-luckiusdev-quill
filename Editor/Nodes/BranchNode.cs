@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using LuckiusDev.Quill.Editor;
 using Unity.GraphToolkit.Editor;
+using UnityEngine;
 
 namespace LuckiusDev.Quill.Nodes.Editor
 {
@@ -37,6 +38,7 @@ namespace LuckiusDev.Quill.Nodes.Editor
                 context.AddInputPort<bool>($"Condition{i}")
                     .WithDisplayName($"Condition {i + 1}")
                     .WithCapacity(PortCapacity.Single)
+                    .WithDefaultValue(true)
                     .Build();
                 
                 context.AddOutputPort($"{k_outputPortName}{i}")
@@ -71,9 +73,9 @@ namespace LuckiusDev.Quill.Nodes.Editor
             {
                 var choiceText = GetChoiceText(i);
                 var targetNodeIndex = nodeMap[GetNextNode($"{k_outputPortName}{i}")];
-                var conditionNodeIndex = nodeMap[GetPreviousNode($"Condition{i}")];
+                var valueReference = GetValueReference<bool>($"Condition{i}", nodeMap);
                 
-                branches.Add(new BranchData(choiceText, targetNodeIndex, conditionNodeIndex));
+                branches.Add(new BranchData(choiceText, targetNodeIndex, valueReference));
             }
 
             return new BranchRuntimeNode(branches);
