@@ -1,7 +1,5 @@
 # Quill by LuckiusDev
 
----
-
 Quill is a tool made for Unity `6000.6.0f1` and onwards, using `Graph Toolkit`, to create flexible and complex dialogues for your game.
 Customize your UI any way you want, and use the composition 'plug-and-play' of Quill to create dialogues with branching path, logic and more!
 
